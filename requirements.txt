@@ -6,4 +6,4 @@ leafmap
 nbserverproxy
 owslib
 streamlit
-
+pandas-gbq
