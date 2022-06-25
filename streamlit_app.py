@@ -1,5 +1,14 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
+import pandas_gbq
+from google.oauth2 import service_account
+from google.cloud import bigquery
+
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
 
 st.set_page_config(layout="wide")
 
@@ -29,6 +38,7 @@ markdown = """
 
 
 """
+result_dataframe = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
 
 st.markdown(markdown)
 
