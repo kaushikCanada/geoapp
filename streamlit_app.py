@@ -38,7 +38,9 @@ markdown = """
 
 
 """
-result_dataframe = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
+df = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
+
+st.dataframe(df, 200, 100)
 
 st.markdown(markdown)
 
