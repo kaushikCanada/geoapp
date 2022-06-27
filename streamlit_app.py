@@ -50,6 +50,11 @@ st.dataframe(df)
 
 st.markdown(markdown)
 
+color = st.select_slider(
+     'Select a color of the rainbow',
+     options=['Country', 'States', 'Districts', 'Subdistricts', 'Parlamentary Constituencies', 'Assembly Consituencies'])
+st.write('My favorite Level is', color)
+
 m = leafmap.Map(minimap_control=True)
 m.add_basemap("OpenTopoMap")
 m.to_streamlit(height=500)
