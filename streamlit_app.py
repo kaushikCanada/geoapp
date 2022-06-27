@@ -50,14 +50,48 @@ st.dataframe(df)
 
 st.markdown(markdown)
 
-color = st.select_slider(
-     'Select a color of the rainbow',
+level = st.select_slider(
+     'Select a level of the data',
      options=['Country', 'States', 'Districts', 'Subdistricts', 'Parlamentary Constituencies', 'Assembly Consituencies'])
-st.write('My favorite Level is', color)
+st.write('My favorite Level is', level)
 
-topic = st.radio('Topic', options=['Roads','Habitations','Facilities','Proposals','Buildings'],horizontal=True)
+topic = st.radio('Topic', options=['Roads','Habitations','Facilities','Proposals','Buildings','OpenStreetMap PoIs'],horizontal=True)
 st.write('Count how many of ',topic,' are available.')
 
+run_query = ''
+
+# set level in query
+if level == 'Country':
+    pass
+elif level == 'States':
+    pass
+elif level == 'Districts':
+    pass
+elif level == 'Subdistricts':
+    pass
+elif level == 'Parlamentary Constituencies':
+    pass
+elif level == 'Assembly Consituencies':
+    pass
+
+# set topic in query
+if topic == 'Country':
+    pass
+elif topic == 'States':
+    pass
+elif topic == 'Districts':
+    pass
+elif topic == 'Subdistricts':
+    pass
+elif topic == 'Parlamentary Constituencies':
+    pass
+elif topic == 'Assembly Consituencies':
+    pass
+
+# parse query outputs
+st.write('select * from table where level=',level,' and topic=',topic)
+
+# activate map with button ?
 m = leafmap.Map(minimap_control=True)
 m.add_basemap("OpenTopoMap")
 m.to_streamlit(height=500)
