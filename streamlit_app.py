@@ -55,6 +55,9 @@ color = st.select_slider(
      options=['Country', 'States', 'Districts', 'Subdistricts', 'Parlamentary Constituencies', 'Assembly Consituencies'])
 st.write('My favorite Level is', color)
 
+topic = st.radio('Topic', options=['Roads','Habitations','Facilities','Proposals','Buildings']
+st.write('Count how many of ',topic,' are available.'))
+
 m = leafmap.Map(minimap_control=True)
 m.add_basemap("OpenTopoMap")
 m.to_streamlit(height=500)
