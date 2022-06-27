@@ -58,38 +58,50 @@ st.write('My favorite Level is', level)
 topic = st.radio('Topic', options=['Roads','Habitations','Facilities','Proposals','Buildings','OpenStreetMap PoIs'],horizontal=True)
 st.write('Count how many of ',topic,' are available.')
 
-run_query = ''
 
 # set level in query
 if level == 'Country':
+    run_query = 'select * from Country'
     pass
 elif level == 'States':
+    run_query = 'select * from States'
     pass
 elif level == 'Districts':
+    run_query = 'select * from Districts'
     pass
 elif level == 'Subdistricts':
+    run_query = 'select * from Subdistricts'
     pass
 elif level == 'Parlamentary Constituencies':
+    run_query = 'select * from Parlamentary Constituencies'
     pass
 elif level == 'Assembly Consituencies':
+    run_query = 'select * from Assembly Consituencies'
     pass
 
 # set topic in query
-if topic == 'Country':
+if topic == 'Roads':
+    run_query = run_query + 'where topic=roads'
     pass
-elif topic == 'States':
+elif topic == 'Habitations':
+    run_query = run_query + 'where topic=Habitations'
     pass
-elif topic == 'Districts':
+elif topic == 'Facilities':
+    run_query = run_query + 'where topic=Facilities'
     pass
-elif topic == 'Subdistricts':
+elif topic == 'Proposals':
+    run_query = run_query + 'where topic=Proposals'
     pass
-elif topic == 'Parlamentary Constituencies':
+elif topic == 'Buildings':
+    run_query = run_query + 'where topic=Buildings'
     pass
-elif topic == 'Assembly Consituencies':
+elif topic == 'OpenStreetMap PoIs':
+    run_query = run_query + 'where topic=OpenStreetMap'
     pass
 
 # parse query outputs
 st.write('select * from table where level=',level,' and topic=',topic)
+st.write(run_query)
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
