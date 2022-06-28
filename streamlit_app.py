@@ -61,46 +61,100 @@ st.write('Count how many of ',topic,' are available.')
 
 # set level in query
 if level == 'Country':
-    run_query = 'select * from Country'
+    level_query = 'select country_code code,country_name name, geometry from dev-ind-geo-01.geoprocessed.country'
     pass
 elif level == 'States':
-    run_query = 'select * from States'
+    level_query = 'select state_code code,state_name name, geometry from dev-ind-geo-01.geoprocessed.states;'
     pass
 elif level == 'Districts':
-    run_query = 'select * from Districts'
+    level_query = 'select district_code code,district_name name, geometry from dev-ind-geo-01.geoprocessed.districts'
     pass
 elif level == 'Subdistricts':
-    run_query = 'select * from Subdistricts'
+    level_query = 'select taluk_code code,taluk_name name, geometry from dev-ind-geo-01.geoprocessed.subdistricts'
     pass
 elif level == 'Parlamentary Constituencies':
-    run_query = 'select * from Parlamentary Constituencies'
+    level_query = 'select * from Parlamentary Constituencies'
     pass
 elif level == 'Assembly Consituencies':
-    run_query = 'select * from Assembly Consituencies'
+    level_query = 'select * from Assembly Consituencies'
     pass
 
 # set topic in query
 if topic == 'Roads':
-    run_query = run_query + 'where topic=roads'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.road c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 elif topic == 'Habitations':
-    run_query = run_query + 'where topic=Habitations'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.habitation c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 elif topic == 'Facilities':
-    run_query = run_query + 'where topic=Facilities'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.facilities c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 elif topic == 'Proposals':
-    run_query = run_query + 'where topic=Proposals'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.proposal c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 elif topic == 'Buildings':
-    run_query = run_query + 'where topic=Buildings'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.buildings.india c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 elif topic == 'OpenStreetMap PoIs':
-    run_query = run_query + 'where topic=OpenStreetMap'
+    run_query = """
+    select a.*,t.geometry 
+    from (
+    select code,name,count(cgeom) cnt
+    from(
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.road c,(${level_query}) t
+    where ST_CONTAINS(t.geometry,h.geometry)
+    )
+    group by code,name) a right join (${level_query}) t on t.code = a.code
+    """
     pass
 
 # parse query outputs
-st.write('select * from table where level=',level,' and topic=',topic)
+# st.write('select * from table where level=',level,' and topic=',topic)
 st.write(run_query)
 
 # activate map with button ?
