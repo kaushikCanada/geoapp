@@ -3,6 +3,7 @@ import leafmap.foliumap as leafmap
 import pandas_gbq
 from google.oauth2 import service_account
 from google.cloud import bigquery
+import geopandas as gpd
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -46,7 +47,7 @@ group by taluk_code,taluk_name) a right join `dev-ind-geo-01.geoprocessed.subdis
 df = pandas_gbq.read_gbq(query, credentials=credentials)
 # df = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
 
-st.dataframe(df)
+# st.dataframe(df)
 
 st.markdown(markdown)
 
@@ -79,18 +80,23 @@ elif level == 'Assembly Consituencies':
     level_query = 'select * from Assembly Consituencies'
     pass
 
-# set topic in query
-if topic == 'Roads':
+def get_run_query(topic,level_query):
     run_query = """
     select a.*,t.geometry 
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.road c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed."""+topic+""" c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
+    return run_query
+
+
+# set topic in query
+if topic == 'Roads':
+    run_query = get_run_query(topic,level_query)
     pass
 elif topic == 'Habitations':
     run_query = """
@@ -98,10 +104,10 @@ elif topic == 'Habitations':
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.habitation c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.habitation c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
     pass
 elif topic == 'Facilities':
@@ -110,10 +116,10 @@ elif topic == 'Facilities':
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.facilities c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.facilities c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
     pass
 elif topic == 'Proposals':
@@ -155,6 +161,7 @@ elif topic == 'OpenStreetMap PoIs':
 
 # parse query outputs
 # st.write('select * from table where level=',level,' and topic=',topic)
+st.write(level_query)
 st.write(run_query)
 
 # activate map with button ?
