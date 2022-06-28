@@ -122,10 +122,10 @@ elif topic == 'Proposals':
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.proposal c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.proposal c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
     pass
 elif topic == 'Buildings':
@@ -134,10 +134,10 @@ elif topic == 'Buildings':
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.buildings.india c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.buildings.india c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
     pass
 elif topic == 'OpenStreetMap PoIs':
@@ -146,10 +146,10 @@ elif topic == 'OpenStreetMap PoIs':
     from (
     select code,name,count(cgeom) cnt
     from(
-    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.road c,(${level_query}) t
+    select t.code,t.name,t.geometry tgeom,c.geometry cgeom from dev-ind-geo-01.geoprocessed.road c,("""+level_query+""") t
     where ST_CONTAINS(t.geometry,h.geometry)
     )
-    group by code,name) a right join (${level_query}) t on t.code = a.code
+    group by code,name) a right join ("""+level_query+""") t on t.code = a.code
     """
     pass
 
