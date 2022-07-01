@@ -36,18 +36,12 @@ st.markdown(
 st.header("Instructions")
 
 query = """
-select * from (
-select taluk_code,taluk_name,count(geometry) cnt from(
-select sd.taluk_code,sd.taluk_name,po.geometry from `dev-ind-geo-01.geoprocessed.india_osm_pois` po,`dev-ind-geo-01.geoprocessed.subdistricts` sd
-where ST_CONTAINS(sd.geometry,po.geometry) 
-) 
-group by taluk_code,taluk_name) a right join `dev-ind-geo-01.geoprocessed.subdistricts` b on a.taluk_code=b.taluk_code limit 100;
-
+SELECT * FROM `dev-ind-geo-01.enriched.data_subdistricts`
 """
 df = pandas_gbq.read_gbq(query, credentials=credentials)
 # df = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
 
-# st.dataframe(df)
+st.dataframe(df)
 
 st.markdown(markdown)
 
