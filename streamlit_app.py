@@ -35,12 +35,16 @@ st.markdown(
 
 st.header("Instructions")
 
-query = """
-SELECT * FROM `dev-ind-geo-01.enriched.data_subdistricts`
-"""
-df = pandas_gbq.read_gbq(query, credentials=credentials)
-# df = pandas_gbq.read_gbq('SELECT word FROM `bigquery-public-data.samples.shakespeare` LIMIT 10', credentials=credentials)
+@st.experimental_memo(persist="disk")
+def fetch_and_clean_data():
+    # Fetch data from URL here, and then clean it up.
+    query = """
+            SELECT * FROM `dev-ind-geo-01.enriched.data_subdistricts`
+            """
+    data = pandas_gbq.read_gbq(query, credentials=credentials)
+    return data
 
+df=fetch_and_clean_data()
 st.dataframe(df)
 
 st.markdown(markdown)
