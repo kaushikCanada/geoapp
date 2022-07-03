@@ -60,42 +60,46 @@ st.write('Count how many of ',topic,' are available.')
 
 # set level in query
 if level == 'Country':
-
+    # group by country code
     pass
 elif level == 'States':
-
+    # group by state code
     pass
 elif level == 'Districts':
-
+    # group by district code
     pass
 elif level == 'Subdistricts':
-
+    # group by subdistrict code
     pass
 elif level == 'Parlamentary Constituencies':
+    # group by pc code
     pass
 elif level == 'Assembly Consituencies':
+    # group by ac code
     pass
 
 
 # set topic in query
 if topic == 'Roads':
-
+    # count number of roads
     pass
 elif topic == 'Habitations':
-
+    # count number of habitations
     pass
 elif topic == 'Facilities':
-
+    # count number of facilities
     pass
 elif topic == 'Proposals':
-
+    # count number of proposals
     pass
 elif topic == 'Buildings':
-
+    # count number of buildings
     pass
 elif topic == 'OpenStreetMap PoIs':
-
+    # count number of osm pois
     pass
+
+# final geo dataframe for map
 
 
 # activate map with button ?
