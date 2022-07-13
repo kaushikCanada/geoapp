@@ -4,6 +4,7 @@ import pandas_gbq
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import geopandas as gpd
+import pandas as pd
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -54,7 +55,7 @@ def fetch_boundary_data():
 
 df=fetch_enriched_data()
 st.dataframe(df)
-outdf = gpd.DataFrame()
+outdf = pd.DataFrame()
 
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
