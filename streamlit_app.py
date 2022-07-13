@@ -100,28 +100,29 @@ elif level == 'Assembly Consituencies':
 if topic == 'Roads':
     # count number of roads
     outdf = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
-    outdf.columns = group_attr + ['cnt']
     pass
 elif topic == 'Habitations':
     # count number of habitations
-    # outdf = df.groupby(group_attr).agg(cnt = ('habcnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
     pass
 elif topic == 'Facilities':
     # count number of facilities
-    # outdf = df.groupby(group_attr).agg(cnt = ('faccnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
     pass
 elif topic == 'Proposals':
     # count number of proposals
-    # outdf = df.groupby(group_attr).agg(cnt = ('propcnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
     pass
 elif topic == 'Buildings':
     # count number of buildings
-    # outdf = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
     pass
 elif topic == 'OpenStreetMap PoIs':
     # count number of osm pois
-    # outdf = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
     pass
+
+outdf.columns = group_attr + ['cnt']
 
 # final geo dataframe for map
 st.dataframe(outdf)
