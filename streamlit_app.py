@@ -36,7 +36,7 @@ st.markdown(
 st.header("Instructions")
 
 @st.experimental_memo(persist="disk")
-def fetch_and_clean_data():
+def fetch_enriched_data():
     # Fetch data from URL here, and then clean it up.
     query = """
             SELECT * FROM `dev-ind-geo-01.enriched.data_subdistricts`
@@ -44,8 +44,19 @@ def fetch_and_clean_data():
     data = pandas_gbq.read_gbq(query, credentials=credentials)
     return data
 
-df=fetch_and_clean_data()
+@st.experimental_memo(persist="disk")
+def fetch_boundary_data():
+    country = pandas_gbq.read_gbq("SELECT country_code,country_name,geom_text FROM dev-ind-geo-01.geoprocessed.country", credentials=credentials)
+    states = pandas_gbq.read_gbq("SELECT state_code,state_name,geom_text FROM dev-ind-geo-01.geoprocessed.states", credentials=credentials)
+    districts = pandas_gbq.read_gbq("SELECT district_code,district_name,geom_text FROM dev-ind-geo-01.geoprocessed.districts", credentials=credentials)
+    subdistricts = pandas_gbq.read_gbq("SELECT taluk_code,taluk_name,geom_text FROM dev-ind-geo-01.geoprocessed.subdistricts", credentials=credentials)
+    return country,states,districts,subdistricts
+
+df=fetch_enriched_data()
 st.dataframe(df)
+outdf = gpd.DataFrame()
+
+country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
 st.markdown(markdown)
 
@@ -61,15 +72,19 @@ st.write('Count how many of ',topic,' are available.')
 # set level in query
 if level == 'Country':
     # group by country code
+    group_attr = ['country_code']
     pass
 elif level == 'States':
     # group by state code
+    group_attr = ['state_code']
     pass
 elif level == 'Districts':
     # group by district code
+    group_attr = ['district_code']
     pass
 elif level == 'Subdistricts':
     # group by subdistrict code
+    group_attr = ['taluk_code']
     pass
 elif level == 'Parlamentary Constituencies':
     # group by pc code
@@ -82,25 +97,31 @@ elif level == 'Assembly Consituencies':
 # set topic in query
 if topic == 'Roads':
     # count number of roads
+    out_df = df.groupBy(group_attr).agg(cnt = ('roadcnt','sum'))
     pass
 elif topic == 'Habitations':
     # count number of habitations
+    out_df = df.groupBy(group_attr).agg(cnt = ('habcnt','sum'))
     pass
 elif topic == 'Facilities':
     # count number of facilities
+    out_df = df.groupBy(group_attr).agg(cnt = ('faccnt','sum'))
     pass
 elif topic == 'Proposals':
     # count number of proposals
+    out_df = df.groupBy(group_attr).agg(cnt = ('propcnt','sum'))
     pass
 elif topic == 'Buildings':
     # count number of buildings
+    out_df = df.groupBy(group_attr).agg(cnt = ('bldngcnt','sum'))
     pass
 elif topic == 'OpenStreetMap PoIs':
     # count number of osm pois
+    out_df = df.groupBy(group_attr).agg(cnt = ('osmpoicnt','sum'))
     pass
 
 # final geo dataframe for map
-
+st.dataframe(out_df)
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
