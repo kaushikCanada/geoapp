@@ -56,6 +56,7 @@ def fetch_boundary_data():
 df=fetch_enriched_data()
 st.dataframe(df)
 outdf = pd.DataFrame()
+st.write(pd.__version__)
 
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
@@ -98,31 +99,31 @@ elif level == 'Assembly Consituencies':
 # set topic in query
 if topic == 'Roads':
     # count number of roads
-    out_df = df.groupBy(group_attr).agg(cnt = ('roadcnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('roadcnt','sum'))
     pass
 elif topic == 'Habitations':
     # count number of habitations
-    out_df = df.groupBy(group_attr).agg(cnt = ('habcnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('habcnt','sum'))
     pass
 elif topic == 'Facilities':
     # count number of facilities
-    out_df = df.groupBy(group_attr).agg(cnt = ('faccnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('faccnt','sum'))
     pass
 elif topic == 'Proposals':
     # count number of proposals
-    out_df = df.groupBy(group_attr).agg(cnt = ('propcnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('propcnt','sum'))
     pass
 elif topic == 'Buildings':
     # count number of buildings
-    out_df = df.groupBy(group_attr).agg(cnt = ('bldngcnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('bldngcnt','sum'))
     pass
 elif topic == 'OpenStreetMap PoIs':
     # count number of osm pois
-    out_df = df.groupBy(group_attr).agg(cnt = ('osmpoicnt','sum'))
+    # out_df = df.groupBy(group_attr).agg(cnt = ('osmpoicnt','sum'))
     pass
 
 # final geo dataframe for map
-st.dataframe(out_df)
+st.dataframe(outdf)
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
