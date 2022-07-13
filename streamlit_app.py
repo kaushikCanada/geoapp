@@ -124,6 +124,7 @@ elif topic == 'OpenStreetMap PoIs':
 
 # final geo dataframe for map
 st.dataframe(outdf)
+st.write(outdf.info())
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
