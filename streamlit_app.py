@@ -99,7 +99,8 @@ elif level == 'Assembly Consituencies':
 # set topic in query
 if topic == 'Roads':
     # count number of roads
-    outdf = df.groupby(group_attr).agg(cnt = ('roadcnt','sum'))
+    outdf = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
+    outdf.columns = group_attr + ['cnt']
     pass
 elif topic == 'Habitations':
     # count number of habitations
