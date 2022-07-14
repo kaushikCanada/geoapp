@@ -74,18 +74,29 @@ def fetch_enriched_data():
 def fetch_boundary_data():
     country = pandas_gbq.read_gbq("SELECT country_code,country_name,geom_text FROM dev-ind-geo-01.geoprocessed.country", credentials=credentials)
     country = gpd.GeoDataFrame(country,crs="EPSG:4326",geometry=country['geom_text'].apply(wkt.loads))
+
     states = pandas_gbq.read_gbq("SELECT state_code,state_name,geom_text FROM dev-ind-geo-01.geoprocessed.states", credentials=credentials)
+    states = gpd.GeoDataFrame(states,crs="EPSG:4326",geometry=states['geom_text'].apply(wkt.loads))
+
     districts = pandas_gbq.read_gbq("SELECT district_code,district_name,geom_text FROM dev-ind-geo-01.geoprocessed.districts", credentials=credentials)
+    districts = gpd.GeoDataFrame(districts,crs="EPSG:4326",geometry=districts['geom_text'].apply(wkt.loads))
+
     subdistricts = pandas_gbq.read_gbq("SELECT taluk_code,taluk_name,geom_text FROM dev-ind-geo-01.geoprocessed.subdistricts", credentials=credentials)
+    subdistricts = gpd.GeoDataFrame(subdistricts,crs="EPSG:4326",geometry=subdistricts['geom_text'].apply(wkt.loads))
+
     return country,states,districts,subdistricts
 
+# AGGREGATE DATA
 df=fetch_enriched_data()
 st.dataframe(df)
 # outdf = gpd.GeoDataFrame()
 # st.write(pd.__version__)
 
+# BOUNDARY DATA
 level_df_dict={}
 level_df_dict['Country'],level_df_dict['States'],level_df_dict['Districts'],level_df_dict['Subdistricts'] = fetch_boundary_data()
+level_df_dict['Parlamentary Constituencies'] = None
+level_df_dict['Assembly Consituencies'] = None
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
 st.markdown(markdown)
@@ -98,6 +109,9 @@ st.write('My favorite Level is', level)
 topic = st.radio('Topic', options=list(topic_dict.keys()),horizontal=True) # ['Roads','Habitations','Facilities','Proposals','Buildings','OpenStreetMap PoIs']
 st.write('Count how many of ',topic,' are available.')
 
+
+group_attr = level_dict[level]
+outdf = level_df_dict[level]
 
 # set level in query
 if level == 'Country':
@@ -129,6 +143,7 @@ elif level == 'Assembly Consituencies':
     outdf = subdistricts_df
     pass
 
+outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index()
 
 # set topic in query
 if topic == 'Roads':
