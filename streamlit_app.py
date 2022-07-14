@@ -95,8 +95,8 @@ st.dataframe(df)
 # BOUNDARY DATA
 level_df_dict={}
 level_df_dict['Country'],level_df_dict['States'],level_df_dict['Districts'],level_df_dict['Subdistricts'] = fetch_boundary_data()
-level_df_dict['Parlamentary Constituencies'] = None
-level_df_dict['Assembly Consituencies'] = None
+level_df_dict['Parlamentary Constituencies'] = level_df_dict['Subdistricts']
+level_df_dict['Assembly Consituencies'] = level_df_dict['Subdistricts']
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
 st.markdown(markdown)
@@ -114,62 +114,62 @@ group_attr = level_dict[level]
 outdf = level_df_dict[level]
 
 # set level in query
-if level == 'Country':
-    # group by country code
-    group_attr = ['country_code']
-    outdf = country_df
-    pass
-elif level == 'States':
-    # group by state code
-    group_attr = ['state_code']
-    outdf = states_df
-    pass
-elif level == 'Districts':
-    # group by district code
-    group_attr = ['district_code']
-    outdf = districts_df
-    pass
-elif level == 'Subdistricts':
-    # group by subdistrict code
-    group_attr = ['taluk_code']
-    outdf = subdistricts_df
-    pass
-elif level == 'Parlamentary Constituencies':
-    # group by pc code
-    outdf = subdistricts_df
-    pass
-elif level == 'Assembly Consituencies':
-    # group by ac code
-    outdf = subdistricts_df
-    pass
+# if level == 'Country':
+#     # group by country code
+#     group_attr = ['country_code']
+#     outdf = country_df
+#     pass
+# elif level == 'States':
+#     # group by state code
+#     group_attr = ['state_code']
+#     outdf = states_df
+#     pass
+# elif level == 'Districts':
+#     # group by district code
+#     group_attr = ['district_code']
+#     outdf = districts_df
+#     pass
+# elif level == 'Subdistricts':
+#     # group by subdistrict code
+#     group_attr = ['taluk_code']
+#     outdf = subdistricts_df
+#     pass
+# elif level == 'Parlamentary Constituencies':
+#     # group by pc code
+#     outdf = subdistricts_df
+#     pass
+# elif level == 'Assembly Consituencies':
+#     # group by ac code
+#     outdf = subdistricts_df
+#     pass
 
 outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index()
 
 # set topic in query
-if topic == 'Roads':
-    # count number of roads
-    outdf1 = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
-    pass
-elif topic == 'Habitations':
-    # count number of habitations
-    outdf1 = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
-    pass
-elif topic == 'Facilities':
-    # count number of facilities
-    outdf1 = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
-    pass
-elif topic == 'Proposals':
-    # count number of proposals
-    outdf1 = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
-    pass
-elif topic == 'Buildings':
-    # count number of buildings
-    outdf1 = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
-    pass
-elif topic == 'OpenStreetMap PoIs':
-    # count number of osm pois
-    outdf1 = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
-    pass
+# if topic == 'Roads':
+#     # count number of roads
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
+#     pass
+# elif topic == 'Habitations':
+#     # count number of habitations
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
+#     pass
+# elif topic == 'Facilities':
+#     # count number of facilities
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
+#     pass
+# elif topic == 'Proposals':
+#     # count number of proposals
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
+#     pass
+# elif topic == 'Buildings':
+#     # count number of buildings
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
+#     pass
+# elif topic == 'OpenStreetMap PoIs':
+#     # count number of osm pois
+#     outdf1 = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
+#     pass
 
 outdf1.columns = group_attr + ['cnt']
 outdf = outdf.merge(outdf1,on=group_attr,how='left')
