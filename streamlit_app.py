@@ -110,66 +110,66 @@ topic = st.radio('Topic', options=list(topic_dict.keys()),horizontal=True) # ['R
 st.write('Count how many of ',topic,' are available.')
 
 
-group_attr = level_dict[level]
-outdf = level_df_dict[level]
+# group_attr = level_dict[level]
+# outdf = level_df_dict[level]
 
 # set level in query
-# if level == 'Country':
-#     # group by country code
-#     group_attr = ['country_code']
-#     outdf = country_df
-#     pass
-# elif level == 'States':
-#     # group by state code
-#     group_attr = ['state_code']
-#     outdf = states_df
-#     pass
-# elif level == 'Districts':
-#     # group by district code
-#     group_attr = ['district_code']
-#     outdf = districts_df
-#     pass
-# elif level == 'Subdistricts':
-#     # group by subdistrict code
-#     group_attr = ['taluk_code']
-#     outdf = subdistricts_df
-#     pass
-# elif level == 'Parlamentary Constituencies':
-#     # group by pc code
-#     outdf = subdistricts_df
-#     pass
-# elif level == 'Assembly Consituencies':
-#     # group by ac code
-#     outdf = subdistricts_df
-#     pass
+if level == 'Country':
+    # group by country code
+    group_attr = ['country_code']
+    outdf = country_df
+    pass
+elif level == 'States':
+    # group by state code
+    group_attr = ['state_code']
+    outdf = states_df
+    pass
+elif level == 'Districts':
+    # group by district code
+    group_attr = ['district_code']
+    outdf = districts_df
+    pass
+elif level == 'Subdistricts':
+    # group by subdistrict code
+    group_attr = ['taluk_code']
+    outdf = subdistricts_df
+    pass
+elif level == 'Parlamentary Constituencies':
+    # group by pc code
+    outdf = subdistricts_df
+    pass
+elif level == 'Assembly Consituencies':
+    # group by ac code
+    outdf = subdistricts_df
+    pass
 
-outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index()
+# outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index()
 
 # set topic in query
-# if topic == 'Roads':
-#     # count number of roads
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
-#     pass
-# elif topic == 'Habitations':
-#     # count number of habitations
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
-#     pass
-# elif topic == 'Facilities':
-#     # count number of facilities
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
-#     pass
-# elif topic == 'Proposals':
-#     # count number of proposals
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
-#     pass
-# elif topic == 'Buildings':
-#     # count number of buildings
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
-#     pass
-# elif topic == 'OpenStreetMap PoIs':
-#     # count number of osm pois
-#     outdf1 = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
-#     pass
+if topic == 'Roads':
+    # count number of roads
+    outdf1 = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
+    pass
+elif topic == 'Habitations':
+    # count number of habitations
+    outdf1 = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
+    pass
+elif topic == 'Facilities':
+    # count number of facilities
+    outdf1 = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
+    pass
+elif topic == 'Proposals':
+    # count number of proposals
+    outdf1 = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
+    pass
+elif topic == 'Buildings':
+    # count number of buildings
+    outdf1 = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
+    pass
+elif topic == 'OpenStreetMap PoIs':
+    # count number of osm pois
+    outdf1 = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
+    pass
 
 outdf1.columns = group_attr + ['cnt']
 outdf = outdf.merge(outdf1,on=group_attr,how='left')
