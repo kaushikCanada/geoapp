@@ -160,7 +160,7 @@ outdf1.columns = group_attr + ['cnt']
 outdf = outdf.merge(outdf1,on=group_attr,how='left')
 
 # final geo dataframe for map
-st.dataframe(outdf)
+# st.dataframe(outdf)
 st.write(type(outdf))
 # df['geometry'] = df.wkt_geom.apply(wkt.loads)
 
