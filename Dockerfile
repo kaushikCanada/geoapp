@@ -10,10 +10,9 @@ RUN pip install geemap leafmap owslib streamlit
 
 ENV PORT=8080
 
-
-COPY *.py ./ 
-# COPY data  ./data/
-RUN mkdir ./".streamlit"
-COPY secrets.toml ./".streamlit"
+WORKDIR /app
+COPY *.py /app/ 
+# RUN mkdir /app/".streamlit"
+# COPY secrets.toml /app/".streamlit"
 
 CMD streamlit run streamlit_app.py --server.port=${PORT}  --browser.serverAddress="0.0.0.0"
