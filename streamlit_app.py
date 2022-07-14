@@ -32,14 +32,19 @@ st.sidebar.image(logo)
 level_dict = {
     'Country':'country_code',
     'States':'state_code',
-    'Districts':'',
-    'Subdistricts':'',
+    'Districts':'district_code',
+    'Subdistricts':'taluk_code',
     'Parlamentary Constituencies':'',
     'Assembly Consituencies':''
 }
 
 topic_dict = {
-
+    'Roads':'roadcnt',
+    'Habitations':'habcnt',
+    'Facilities':'faccnt',
+    'Proposals':'propcnt',
+    'Buildings':'bldngcnt',
+    'OpenStreetMap PoIs':'osmpoicnt'
 }
 
 ###############################################
@@ -77,16 +82,18 @@ st.dataframe(df)
 outdf = pd.DataFrame()
 # st.write(pd.__version__)
 
+level_df_dict={}
+level_df_dict['Country'],level_df_dict['States'],level_df_dict['Districts'],level_df_dict['Subdistricts'] = fetch_boundary_data()
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
 st.markdown(markdown)
 
 level = st.select_slider(
      'Select a level of the data',
-     options=['Country', 'States', 'Districts', 'Subdistricts', 'Parlamentary Constituencies', 'Assembly Consituencies'])
+     options=list(level_dict.keys())) # ['Country', 'States', 'Districts', 'Subdistricts', 'Parlamentary Constituencies', 'Assembly Consituencies']
 st.write('My favorite Level is', level)
 
-topic = st.radio('Topic', options=['Roads','Habitations','Facilities','Proposals','Buildings','OpenStreetMap PoIs'],horizontal=True)
+topic = st.radio('Topic', options=list(topic_dict.keys()),horizontal=True) # ['Roads','Habitations','Facilities','Proposals','Buildings','OpenStreetMap PoIs']
 st.write('Count how many of ',topic,' are available.')
 
 
