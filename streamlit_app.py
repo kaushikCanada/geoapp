@@ -95,8 +95,8 @@ st.dataframe(df)
 # BOUNDARY DATA
 level_df_dict={}
 level_df_dict['Country'],level_df_dict['States'],level_df_dict['Districts'],level_df_dict['Subdistricts'] = fetch_boundary_data()
-level_df_dict['Parlamentary Constituencies'] = level_df_dict['Subdistricts']
-level_df_dict['Assembly Consituencies'] = level_df_dict['Subdistricts']
+level_df_dict['Parlamentary Constituencies'] = None
+level_df_dict['Assembly Consituencies'] = None
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
 st.markdown(markdown)
