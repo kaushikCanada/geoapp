@@ -1,5 +1,6 @@
 import streamlit as st
-import leafmap.foliumap as leafmap
+# import leafmap.foliumap as leafmap
+import leafmap.kepler as leafmap
 import pandas_gbq
 from google.oauth2 import service_account
 from google.cloud import bigquery

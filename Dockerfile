@@ -8,11 +8,12 @@ RUN conda install -y -c conda-forge pandas-profiling
 RUN conda install -y -c pyviz panel
 RUN pip install geemap leafmap owslib streamlit
 
-ENV PORT=
+ENV PORT=8080
 
 
-COPY app.py . 
-COPY utils.py . 
-COPY data  ./data/
+COPY *.py ./ 
+# COPY data  ./data/
+RUN mkdir ./".streamlit"
+COPY secrets.toml ./".streamlit"
 
-CMD streamlit run app.py --server.port=${PORT}  --browser.serverAddress="0.0.0.0"
+CMD streamlit run streamlit_app.py --server.port=${PORT}  --browser.serverAddress="0.0.0.0"
