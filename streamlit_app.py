@@ -156,7 +156,7 @@ elif topic == 'OpenStreetMap PoIs':
     pass
 
 outdf1.columns = group_attr + ['cnt']
-outdf = pd.merge(outdf,outdf1,on=group_attr,how='left')
+outdf = outdf.merge(outdf1,on=group_attr,how='left')
 
 # final geo dataframe for map
 st.dataframe(outdf)
