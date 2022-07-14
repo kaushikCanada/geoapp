@@ -25,6 +25,25 @@ st.sidebar.info(markdown)
 logo = "https://i.imgur.com/UbOXYAU.png"
 st.sidebar.image(logo)
 
+###############################################
+## LEVEL + TOPIC MAPPING
+###############################################
+
+level_dict = {
+    'Country':'country_code',
+    'States':'state_code',
+    'Districts':'',
+    'Subdistricts':'',
+    'Parlamentary Constituencies':'',
+    'Assembly Consituencies':''
+}
+
+topic_dict = {
+
+}
+
+###############################################
+
 # Customize page title
 st.title("Streamlit for Geospatial Applications")
 
@@ -56,7 +75,7 @@ def fetch_boundary_data():
 df=fetch_enriched_data()
 st.dataframe(df)
 outdf = pd.DataFrame()
-st.write(pd.__version__)
+# st.write(pd.__version__)
 
 country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
 
@@ -75,54 +94,61 @@ st.write('Count how many of ',topic,' are available.')
 if level == 'Country':
     # group by country code
     group_attr = ['country_code']
+    outdf = country_df
     pass
 elif level == 'States':
     # group by state code
     group_attr = ['state_code']
+    outdf = states_df
     pass
 elif level == 'Districts':
     # group by district code
     group_attr = ['district_code']
+    outdf = districts_df
     pass
 elif level == 'Subdistricts':
     # group by subdistrict code
     group_attr = ['taluk_code']
+    outdf = subdistricts_df
     pass
 elif level == 'Parlamentary Constituencies':
     # group by pc code
+    outdf = subdistricts_df
     pass
 elif level == 'Assembly Consituencies':
     # group by ac code
+    outdf = subdistricts_df
     pass
 
 
 # set topic in query
 if topic == 'Roads':
     # count number of roads
-    outdf = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('roadcnt','sum')).reset_index()
     pass
 elif topic == 'Habitations':
     # count number of habitations
-    outdf = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('habcnt','sum')).reset_index()
     pass
 elif topic == 'Facilities':
     # count number of facilities
-    outdf = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('faccnt','sum')).reset_index()
     pass
 elif topic == 'Proposals':
     # count number of proposals
-    outdf = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('propcnt','sum')).reset_index()
     pass
 elif topic == 'Buildings':
     # count number of buildings
-    outdf = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('bldngcnt','sum')).reset_index()
     pass
 elif topic == 'OpenStreetMap PoIs':
     # count number of osm pois
-    outdf = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
+    outdf1 = df.groupby(group_attr).agg(cnt = ('osmpoicnt','sum')).reset_index()
     pass
 
-outdf.columns = group_attr + ['cnt']
+outdf1.columns = group_attr + ['cnt']
+outdf = pd.merge(outdf,outdf1,on=group_attr,how='left')
 
 # final geo dataframe for map
 st.dataframe(outdf)
