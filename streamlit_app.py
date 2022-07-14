@@ -177,9 +177,9 @@ outdf = outdf.merge(outdf1,on=group_attr,how='left')
 # final geo dataframe for map
 # st.dataframe(outdf)
 st.write(type(outdf))
-# df['geometry'] = df.wkt_geom.apply(wkt.loads)
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
 m.add_basemap("OpenTopoMap")
+m.add_gdf(outdf, layer_name=level+'__'+topic)
 m.to_streamlit(height=500)
