@@ -31,10 +31,10 @@ st.sidebar.image(logo)
 ###############################################
 
 level_dict = {
-    'Country':'country_code',
-    'States':'state_code',
-    'Districts':'district_code',
-    'Subdistricts':'taluk_code',
+    'Country':['country_code'],
+    'States':['state_code'],
+    'Districts':['district_code'],
+    'Subdistricts':['taluk_code'],
     'Parlamentary Constituencies':'',
     'Assembly Consituencies':''
 }
