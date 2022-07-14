@@ -5,6 +5,7 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 import geopandas as gpd
 import pandas as pd
+from shapely import wkt
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -79,7 +80,7 @@ def fetch_boundary_data():
 
 df=fetch_enriched_data()
 st.dataframe(df)
-outdf = pd.DataFrame()
+outdf = gpd.GeoDataFrame()
 # st.write(pd.__version__)
 
 level_df_dict={}
@@ -159,7 +160,8 @@ outdf = pd.merge(outdf,outdf1,on=group_attr,how='left')
 
 # final geo dataframe for map
 st.dataframe(outdf)
-st.write(outdf.info())
+st.write(type(outdf))
+# df['geometry'] = df.wkt_geom.apply(wkt.loads)
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
