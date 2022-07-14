@@ -73,6 +73,7 @@ def fetch_enriched_data():
 @st.experimental_memo(persist="disk")
 def fetch_boundary_data():
     country = pandas_gbq.read_gbq("SELECT country_code,country_name,geom_text FROM dev-ind-geo-01.geoprocessed.country", credentials=credentials)
+    country = gpd.GeoDataFrame(country,crs="EPSG:4326",geometry=country['geom_text'].apply(wkt.loads))
     states = pandas_gbq.read_gbq("SELECT state_code,state_name,geom_text FROM dev-ind-geo-01.geoprocessed.states", credentials=credentials)
     districts = pandas_gbq.read_gbq("SELECT district_code,district_name,geom_text FROM dev-ind-geo-01.geoprocessed.districts", credentials=credentials)
     subdistricts = pandas_gbq.read_gbq("SELECT taluk_code,taluk_name,geom_text FROM dev-ind-geo-01.geoprocessed.subdistricts", credentials=credentials)
@@ -80,7 +81,7 @@ def fetch_boundary_data():
 
 df=fetch_enriched_data()
 st.dataframe(df)
-outdf = gpd.GeoDataFrame()
+# outdf = gpd.GeoDataFrame()
 # st.write(pd.__version__)
 
 level_df_dict={}
