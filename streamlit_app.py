@@ -1,12 +1,16 @@
 import streamlit as st
-# import leafmap.foliumap as leafmap
 import leafmap.kepler as leafmap
+# import leafmap.foliumap as leafmap
+# import leafmap
 import pandas_gbq
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import geopandas as gpd
 import pandas as pd
 from shapely import wkt
+import sqlalchemy
+
+eng = sqlalchemy.create_engine("duckdb:///:memory:")
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -36,8 +40,8 @@ level_dict = {
     'States':['state_code'],
     'Districts':['district_code'],
     'Subdistricts':['taluk_code'],
-    'Parlamentary Constituencies':'',
-    'Assembly Consituencies':''
+    'Parlamentary Constituencies':[''],
+    'Assembly Consituencies':['']
 }
 
 topic_dict = {
@@ -89,6 +93,8 @@ def fetch_boundary_data():
 
 # AGGREGATE DATA
 df=fetch_enriched_data()
+# DUCK DB TABLE
+eng.execute("register", ("allcounts", df))
 st.dataframe(df)
 # outdf = gpd.GeoDataFrame()
 # st.write(pd.__version__)
@@ -98,7 +104,13 @@ level_df_dict={}
 level_df_dict['Country'],level_df_dict['States'],level_df_dict['Districts'],level_df_dict['Subdistricts'] = fetch_boundary_data()
 level_df_dict['Parlamentary Constituencies'] = None
 level_df_dict['Assembly Consituencies'] = None
-country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
+# country_df,states_df,districts_df,subdistricts_df = fetch_boundary_data()
+
+# DUCK DB TABLES
+eng.execute("register", ("Country", pd.DataFrame(level_df_dict['Country'].drop('geometry',axis=1))))
+eng.execute("register", ("States", pd.DataFrame(level_df_dict['States'].drop('geometry',axis=1))))
+eng.execute("register", ("Districts", pd.DataFrame(level_df_dict['Districts'].drop('geometry',axis=1))))
+eng.execute("register", ("Subdistricts", pd.DataFrame(level_df_dict['Subdistricts'].drop('geometry',axis=1))))
 
 st.markdown(markdown)
 
@@ -144,6 +156,7 @@ outdf = level_df_dict[level]
 #     outdf = subdistricts_df
 #     pass
 
+# group by group attr and sum by topic
 outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index()
 
 # set topic in query
@@ -175,12 +188,19 @@ outdf1 = df.groupby(group_attr).agg(cnt = (topic_dict[topic],'sum')).reset_index
 outdf1.columns = group_attr + ['cnt']
 outdf = outdf.merge(outdf1,on=group_attr,how='left')
 
+# TRY DUCK DB
+sql = """
+select c.country_code,a.roadcnt from Country c join allcounts a on c.country_code = a.country_code
+"""
+outduck = pd.read_sql(sql,eng)
+st.dataframe(outduck)
+
 # final geo dataframe for map
 # st.dataframe(outdf)
 st.write(type(outdf))
 
 # activate map with button ?
 m = leafmap.Map(minimap_control=True)
-m.add_basemap("OpenTopoMap")
+# m.add_basemap("OpenTopoMap")
 m.add_gdf(outdf, layer_name=level+'__'+topic)
 m.to_streamlit(height=500)

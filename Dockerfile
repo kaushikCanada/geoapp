@@ -7,6 +7,7 @@ RUN pip install pandas-gbq google-cloud-bigquery xlrd
 RUN conda install -y -c conda-forge pandas-profiling
 RUN conda install -y -c pyviz panel
 RUN pip install geemap leafmap owslib streamlit
+RUN pip install duckdb==0.4.0 duckdb-engine
 
 ENV PORT=8080
 
